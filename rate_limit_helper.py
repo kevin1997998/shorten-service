@@ -32,23 +32,18 @@ class RedisRateLimiterMiddleware(BaseHTTPMiddleware):
         request: Request,
         call_next: Callable,
     ) -> Response:
-        # Retrieve the client's IP address or any other identifier
+
         client_ip = request.client.host
 
-        # Create the Redis key using the client's IP and minute timestamp
         key = f"{client_ip}:{int(time.time() // self.window)}"
 
-        # Check the current request count for the client
         request_count = self.redis_client.incr(key)
         if request_count is None:
-            # Handle Redis error
             return PlainTextResponse("Internal server error.", status_code=500)
 
         if request_count == 1:
-            # Set an expiration for the key
             self.redis_client.expire(key, self.window)
 
-        # Check if the client has exceeded the rate limit
         if request_count > self.limit:
             return PlainTextResponse(
                 "Rate limit exceeded. Try again later.", status_code=429

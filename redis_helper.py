@@ -7,7 +7,7 @@ class RedisError(Exception):
     """Custom exception for Redis errors."""
 
 
-CACHE_TTL = 3  # 30 days
+CACHE_TTL = 3
 
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 PORT = os.getenv("REDIS_PORT", 6379)
