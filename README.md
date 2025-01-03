@@ -24,8 +24,10 @@ docker-compose up --build
     "reason": ""
 }
 ```
+- return status code 400 if input url is not valid
 ### rediect-url (get)
 - put the url in browser ex: `http://8ffdefbdec956b595d257f0aaeefd623`
+- return status code 404 if short url is not valid
 
 ## rate-limiting principle
 - at most 3 times in 5 seoconds
