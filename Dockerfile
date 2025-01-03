@@ -19,5 +19,10 @@ RUN sed -i 's/^daemonize no/daemonize yes/' /etc/redis/redis.conf
 # Expose application and Redis ports
 EXPOSE 8000 6379
 
+# Define environment variables
+ENV REDIS_HOST=redis
+ENV REDIS_PORT=6379
+ENV POSTGRES_URL=postgresql+asyncpg://user:password@db/shortener
+
 # Command to start Redis and your app
 CMD redis-server /etc/redis/redis.conf && uvicorn main:app --host 0.0.0.0 --port 8000

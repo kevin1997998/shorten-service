@@ -1,3 +1,5 @@
+import os
+
 import redis
 
 
@@ -5,7 +7,10 @@ class RedisError(Exception):
     """Custom exception for Redis errors."""
 
 
-CACHE_TTL = 24 * 60 * 60 * 30  # 30 days
+CACHE_TTL = 3  # 30 days
+
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+PORT = os.getenv("REDIS_PORT", 6379)
 
 
 class RedisClient:
@@ -23,7 +28,9 @@ class RedisClient:
         """Connect to Redis Sentinel and get master instance."""
         if self.client is None:
             self.client = redis.Redis(
-                host="localhost", port=6379, decode_responses=True
+                host=REDIS_HOST,
+                port=PORT,
+                decode_responses=True,
             )
 
     def get(self, key: str):

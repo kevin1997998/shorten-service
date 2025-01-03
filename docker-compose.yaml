@@ -1,0 +1,31 @@
+services:
+  app:
+    image: kcw998998/side:shorten-service
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - db
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://user:password@db/shortener"
+    command: >
+      sh -c "sleep 10 && python main.py"
+
+  redis:
+    image: redis:7
+    container_name: redis
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    ports:
+      - "6379:6379"
+
+  db:
+    image: postgres:14
+    container_name: db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: shortener
+    ports:
+      - "5432:5432"
